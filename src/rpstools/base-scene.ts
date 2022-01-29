@@ -22,15 +22,17 @@ export class BaseScene {
     }
 
     public onUpdate(): void {
-
+        this._objects.forEach((object) => {
+            object.onUpdate(this._engine);
+        })
     }
 
-    public addObject(object: GameObject) {
+    public addObject(object: GameObject): void {
         this._objects.push(object);
         object.onInit(this._engine);
     }
 
-    public removeObject(object: GameObject) {
+    public removeObject(object: GameObject): void {
         if (object) {
             const index = this._objects.findIndex((value) => value === object);
             if (index >= 0) {
@@ -39,7 +41,7 @@ export class BaseScene {
         }
     }
 
-    public removeObjectById(object: GameObject) {
+    public removeObjectById(object: GameObject): void {
         if (object) {
             const index = this._objects.findIndex((value) => value.getId === object.getId);
             if (index >= 0) {

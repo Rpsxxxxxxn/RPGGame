@@ -7,11 +7,11 @@ export class BattleScene extends BaseScene {
         super(engine, SceneType.Battle);
     }
 
-    public onInit() {
+    public onInit(): void {
 
     }
 
-    public onUpdate() {
-
+    public onUpdate(): void {
+        super.onUpdate();
     }
 }

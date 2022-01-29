@@ -2,6 +2,8 @@ import * as PIXI from 'pixi.js'
 import { BattleScene } from "../gamescenes/battle-scene";
 import { WorldScene } from "../gamescenes/world-scene";
 import { BaseScene, SceneType } from "./base-scene";
+import { Keyboard } from './controller';
+import { Timer } from './timer';
 
 export interface TextureInfo {
     name: string;
@@ -10,11 +12,14 @@ export interface TextureInfo {
 
 export class Main {
     private _application: PIXI.Application;
+    private _globalContainer: PIXI.Container;
     private _textures: TextureInfo[] = [];
     private _scene: BaseScene = new WorldScene(this);
     private _nowScene: SceneType = SceneType.None;
     private _nextScene: SceneType = SceneType.World;
+    private _keyboard: Keyboard = new Keyboard();
     private _gameCounter: number = 0;
+    private _timer: Timer = new Timer();
 
     constructor() {
         this._application = new PIXI.Application({
@@ -23,31 +28,43 @@ export class Main {
             backgroundColor: 0xAAAAAA
         });
         document.body.appendChild(this._application.view);
+
+        this._globalContainer = new PIXI.Container();
+    }
+
+    /**
+     * 画像等の読み込み
+     */
+    public async load() {
+        await this.addTexture('./assets/images/char01.png');
+        await this.addTexture('./assets/images/char02.png');
+        await this.addTexture('./assets/images/char03.png');
+        await this.addTexture('./assets/images/char04.png');
+        await this.addTexture('./assets/images/town01.png');
+        await this.addTexture('./assets/images/town02.png');
+        await this.addTexture('./assets/images/town03.png');
+        await this.addTexture('./assets/images/town04.png');
     }
 
     /**
      * 初期化
      */
-    public initialize() {
-        this.addTexture('./assets/images/char01.png');
-        this.addTexture('./assets/images/char02.png');
-        this.addTexture('./assets/images/char03.png');
-        this.addTexture('./assets/images/char04.png');
-        this.addTexture('./assets/images/town01.png');
-        this.addTexture('./assets/images/town02.png');
-        this.addTexture('./assets/images/town03.png');
-        this.addTexture('./assets/images/town04.png');
+    public initialize(): void {
     }
 
     /**
      * 更新処理
      */
-    public mainloop() {
+    public mainloop(): void {
+        this._keyboard.onUpdate();
+        this._timer.onUpdate();
         this.changeScene();
 
         if (this._scene) {
             this._scene.onUpdate();
         }
+
+        this._application.renderer.render(this._globalContainer);
         requestAnimationFrame(this.mainloop.bind(this));
     }
 
@@ -55,14 +72,12 @@ export class Main {
      * テクスチャの追加
      * @param name
      */
-    public addTexture(name: string) {
-        PIXI.Texture.fromURL(name).then(value => {
-            let texture: TextureInfo = {
-                name: name,
-                texture: value
-            }
-            this._textures.push(texture);
-        });
+    public async addTexture(name: string) {
+        let texture: TextureInfo = {
+            name: name,
+            texture: await PIXI.Texture.fromURL(name)
+        }
+        this._textures.push(texture);
     }
 
     /**
@@ -81,7 +96,7 @@ export class Main {
     /**
      * シーンの変更
      */
-    public changeScene() {
+    public changeScene(): void {
         if (this._nowScene !== this._nextScene) {
             switch (this._nextScene) {
                 case SceneType.World:
@@ -98,19 +113,38 @@ export class Main {
     }
 
     /**
+     * 追加
+     */
+    public addChild(object: any): void {
+        this._globalContainer.addChild(object);
+    }
+
+    /**
      * オブジェクトの取得ID
      */
-    public get getObjectId() {
+    public get getObjectId(): number {
         if (++this._gameCounter > 65535) {
             this._gameCounter = 0;
         }
         return this._gameCounter;
     }
-
+    
     /**
-     * 追加
+     * フレーム間の秒数 
      */
-    public addChild(object: any) {
-        this._application.stage.addChild(object);
+    public get getDeltaTime(): number {
+        return this._timer.getDeltaTime;
+    }
+
+    public getKeyDown(keyCode: number): boolean {
+        return this._keyboard.getKeyDown(keyCode);
+    }
+    
+    public getKeyPressed(keyCode: number): boolean {
+        return this._keyboard.getKeyPressed(keyCode);
+    }
+    
+    public getKeyUp(keyCode: number): boolean {
+        return this._keyboard.getKeyUp(keyCode);
     }
 }

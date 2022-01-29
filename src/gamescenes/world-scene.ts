@@ -8,11 +8,11 @@ export class WorldScene extends BaseScene {
         super(engine, SceneType.World);
     }
 
-    public onInit() {
+    public onInit(): void {
         this.addObject(new Character(this._engine));
     }
 
-    public onUpdate() {
-
+    public onUpdate(): void {
+        super.onUpdate();
     }
 }
