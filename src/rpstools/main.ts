@@ -2,30 +2,27 @@ import * as PIXI from 'pixi.js'
 import { BattleScene } from "../gamescenes/battle-scene";
 import { WorldScene } from "../gamescenes/world-scene";
 import { BaseScene, SceneType } from "./base-scene";
+import { MapInfo, Settings, TextureInfo } from './constants';
 import { Keyboard } from './controller';
 import { Timer } from './timer';
-
-export interface TextureInfo {
-    name: string;
-    texture: PIXI.Texture;
-}
 
 export class Main {
     private _application: PIXI.Application;
     private _globalContainer: PIXI.Container;
-    private _textures: TextureInfo[] = [];
     private _scene: BaseScene = new WorldScene(this);
     private _nowScene: SceneType = SceneType.None;
     private _nextScene: SceneType = SceneType.World;
     private _keyboard: Keyboard = new Keyboard();
     private _gameCounter: number = 0;
     private _timer: Timer = new Timer();
+    private _textures: TextureInfo[] = [];
+    private _mapinfos: MapInfo[] = []
 
     constructor() {
         this._application = new PIXI.Application({
-            width: 800,
-            height: 600,
-            backgroundColor: 0xAAAAAA
+            width: Settings.GameWidthSize,
+            height: Settings.GameHeightSize,
+            backgroundColor: Settings.GameBackgroundColor
         });
         document.body.appendChild(this._application.view);
 
@@ -81,6 +78,18 @@ export class Main {
     }
 
     /**
+     * MAPJSONの追加
+     * @param name 
+     */
+    public async addMapJson(name: string) {
+        // let mapinfo: MapInfo = {
+        //     name: name,
+        //     layer: 0,
+        //     map: 
+        // }
+    }
+
+    /**
      * テクスチャの取得
      * @param name 
      * @returns 
@@ -91,6 +100,14 @@ export class Main {
             return value.texture
         }
         return value;
+    }
+
+    /**
+     * MapJsonの取得
+     * @param name 
+     */
+    public getMapJson(name: string) {
+
     }
 
     /**
@@ -136,14 +153,29 @@ export class Main {
         return this._timer.getDeltaTime;
     }
 
+    /**
+     * キー情報の取得
+     * @param keyCode 
+     * @returns 
+     */
     public getKeyDown(keyCode: number): boolean {
         return this._keyboard.getKeyDown(keyCode);
     }
     
+    /**
+     * キー情報の取得（一度のみ）
+     * @param keyCode 
+     * @returns 
+     */
     public getKeyPressed(keyCode: number): boolean {
         return this._keyboard.getKeyPressed(keyCode);
     }
     
+    /**
+     * キー情報の取得（上げた時のみ）
+     * @param keyCode 
+     * @returns 
+     */
     public getKeyUp(keyCode: number): boolean {
         return this._keyboard.getKeyUp(keyCode);
     }

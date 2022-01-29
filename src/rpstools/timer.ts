@@ -13,7 +13,6 @@ export class Timer {
         this._newTime = Date.now();
         this._deltaTime = this._newTime - this._oldTime;
         this._oldTime = this._newTime;
-        // console.log(this._deltaTime)
     }
 
     public get getDeltaTime() {

@@ -2,7 +2,7 @@ import { Main } from "./main";
 
 export enum ObjectType {
     Character,
-    Layer,
+    Field,
 }
 
 export class GameObject {

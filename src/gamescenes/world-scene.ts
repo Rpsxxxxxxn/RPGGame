@@ -1,4 +1,5 @@
 import { Character } from "../gameobjects/character";
+import { FieldMap } from "../gameobjects/fieldmap";
 import { BaseScene, SceneType } from "../rpstools/base-scene";
 import { Main } from "../rpstools/main";
 
@@ -9,6 +10,7 @@ export class WorldScene extends BaseScene {
     }
 
     public onInit(): void {
+        this.addObject(new FieldMap(this._engine));
         this.addObject(new Character(this._engine));
     }
 
