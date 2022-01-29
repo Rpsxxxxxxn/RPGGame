@@ -9,9 +9,12 @@ export class Character extends GameObject {
     private _frameCount: number = 0;
     private _frameTime: number = 0;
     private _frameDirection: number = 0;
+    private _position: Float32Array = new Float32Array(2);
 
     constructor(engine: Main) {
         super(ObjectType.Character, engine.getObjectId, Character.name);
+        this._position[0] = 0;
+        this._position[1] = 0;
     }
 
     public onInit(engine: Main): void {
