@@ -1,18 +1,20 @@
 {
-  "name": "RPG",
+  "name": "rpggame",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack"
+    "start": "webpack",
+    "server": "webpack-dev-server"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^12.20.42",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "webpack-dev-server": "^4.7.3"
   },
   "dependencies": {
     "pixi.js": "^6.2.2",

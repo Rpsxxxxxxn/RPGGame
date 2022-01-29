@@ -1,12 +1,10 @@
 import { BaseScene, SceneType } from "../rpstools/base-scene";
+import { Main } from "../rpstools/main";
 
 export class BattleScene extends BaseScene {
-    constructor() {
-        super(SceneType.Battle);
-    }
 
-    public onLoad() {
-
+    constructor(engine: Main) {
+        super(engine, SceneType.Battle);
     }
 
     public onInit() {

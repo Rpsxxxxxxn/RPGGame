@@ -1,36 +1,10 @@
-import { BaseScene, SceneType } from "./rpstools/base-scene";
-import { Render } from "./rpstools/render";
+import { Main } from "./rpstools/main";
 
-(function() {
-    let render: Render = new Render();
-    let scene: BaseScene;
-    let nowScene: SceneType = SceneType.World;
+const main = new Main();
 
-    function initialize() {
-        render.onLoad();
-        
-        
-    }
+function start() {
+    main.initialize();
+    main.mainloop();
+}
 
-    function mainLoop() {
-
-        requestAnimationFrame(mainLoop);
-    }
-
-    function changeScene() {
-        if (nowScene) {
-
-        }
-
-        if (!scene) {
-
-        }
-    }
-
-    function main() {
-        initialize();
-        mainLoop();
-    }
-    
-    window.onload = main;
-})();
+window.onload = start;

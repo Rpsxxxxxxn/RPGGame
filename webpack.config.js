@@ -1,9 +1,11 @@
+const path = require('path');
+
 module.exports = {
     mode: 'development',
     entry: './src/index.ts',
     output: {
-        path: __dirname,
-        filename: './dist/bundle.js'
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'bundle.js',
     },
     module: {
         rules: [
@@ -13,6 +15,13 @@ module.exports = {
             }
         ]
     },
+    devServer: {
+        static: './dist/',
+        // compress: true,
+        // inline: true,
+        // publicPath: '/dist/',
+        open: true
+	},
     resolve: {
         extensions: ['.ts', '.js']
     }

@@ -1,24 +1,50 @@
+import { GameObject } from './base-object';
+import { Main } from "./main";
+
 export enum SceneType {
+    None,
     World,
     Battle,
 }
 
 export class BaseScene {
+    protected _engine: Main;
     private _type: SceneType;
+    private _objects: GameObject[] = [];
 
-    constructor(type: SceneType) {
+    constructor(engine: Main, type: SceneType) {
         this._type = type;
+        this._engine = engine;
     }
 
-    public onLoad() {
+    public onInit(): void {
+ 
+    }
+
+    public onUpdate(): void {
 
     }
 
-    public onInit() {
-
+    public addObject(object: GameObject) {
+        this._objects.push(object);
+        object.onInit(this._engine);
     }
 
-    public onUpdate() {
+    public removeObject(object: GameObject) {
+        if (object) {
+            const index = this._objects.findIndex((value) => value === object);
+            if (index >= 0) {
+                this._objects.splice(index, 1);
+            }
+        }
+    }
 
+    public removeObjectById(object: GameObject) {
+        if (object) {
+            const index = this._objects.findIndex((value) => value.getId === object.getId);
+            if (index >= 0) {
+                this._objects.splice(index, 1);
+            }
+        }
     }
 }
