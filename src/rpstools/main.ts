@@ -85,6 +85,8 @@ export class Main {
      */
     public changeScene(): void {
         if (this._nowScene !== this._nextScene) {
+            this._scene.onDestroy();
+
             switch (this._nextScene) {
                 case SceneType.World:
                     this._scene = new WorldScene(this);
@@ -177,6 +179,13 @@ export class Main {
      */
     public get getDeltaTime(): number {
         return this._timer.getDeltaTime;
+    }
+
+    /** 
+     * シーンの取得
+     */
+    public get getScene(): BaseScene {
+        return this._scene;
     }
 
     /**

@@ -27,6 +27,12 @@ export class BaseScene {
         })
     }
 
+    public onDestroy(): void {
+        this._objects.forEach((object) => {
+            object.onDestroy(this._engine);
+        })
+    }
+
     public addObject(object: GameObject): void {
         this._objects.push(object);
         object.onInit(this._engine);

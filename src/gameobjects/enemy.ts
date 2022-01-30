@@ -23,9 +23,13 @@ export class Enemy extends GameObject {
     }
 
     public onUpdate(engine: Main): void {
-        this._debugText.setText = `${Enemy.name} x:${this._position.x} y:${this._position.y}`;
+        // this._debugText.setText = `${Enemy.name} x:${this._position.x} y:${this._position.y}`;
 
         this._character.setPosition(this._position);
         this._character.spriteAnimation(engine);
+    }
+
+    public onDestroy(engine: Main): void {
+        
     }
 }

@@ -5,10 +5,7 @@ import { Settings } from '../rpstools/constants';
 import { Main } from '../rpstools/main';
 
 export class FieldMap extends GameObject {
-    // private _sprite: PIXI.Sprite = new PIXI.Sprite;
-    // private _mapchip: Array<Array<number>> = new Array<Array<number>>();
     private _field: GameField = new GameField();
-
 
     constructor(engine: Main) {
         super(ObjectType.Field, engine.getObjectId, 'Map');
@@ -20,5 +17,9 @@ export class FieldMap extends GameObject {
     }
 
     public onUpdate(engine: Main): void {
+    }
+
+    public onDestroy(engine: Main): void {
+        
     }
 }

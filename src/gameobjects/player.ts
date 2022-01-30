@@ -1,4 +1,4 @@
-import { MapData } from './../rpstools/constants';
+import { MapData, Field } from './../rpstools/constants';
 import * as PIXI from 'pixi.js'
 import { Vector2 } from '../rpstools/math-helper';
 import { KeyCode } from '../rpstools/controller';
@@ -14,6 +14,7 @@ export class Player extends GameObject {
     private _position: Vector2 = new Vector2();
     private _direction: Vector2 = new Vector2();
     private _walkSpeed: number = 2;
+    private _judgeMap: any;
 
     constructor(engine: Main) {
         super(ObjectType.Character, engine.getObjectId, Player.name);
@@ -24,6 +25,11 @@ export class Player extends GameObject {
     }
 
     public onInit(engine: Main): void {
+        let mapinfo = engine.getMapJson('./assets/json/town1.json');
+        if (mapinfo) {
+            this._judgeMap = mapinfo.data[1].map;
+            console.log(this._judgeMap)
+        }
         this._character.setTexture(engine, './assets/images/char01.png', Settings.ChipSize);
         this._character.selectCharacter(2);
         engine.addText(this._debugText);
@@ -35,8 +41,21 @@ export class Player extends GameObject {
         this._character.spriteAnimation(engine);
     }
 
+    public onDestroy(engine: Main): void {
+    }
+
+    private wallCheck(dx: number, dy: number): boolean {
+        let px = (~~(this._position.x / Settings.ChipSize) + dx);
+        let py = (~~(this._position.y / Settings.ChipSize) * (Field.Width)) + (Field.Width * dy);
+        return (
+            this._judgeMap[((px) + (py))] === 0
+        )
+    }
+
     private playerControl(engine: Main): void {
-        this._debugText.setText = `Player x:${this._position.x} y:${this._position.y}`;
+        // let px = (~~(this._position.x / Settings.ChipSize));
+        // let py = (~~(this._position.y / Settings.ChipSize) * (Field.Width) + (Field.Width * -1));
+        // this._debugText.setText = `Player x:${px} y:${py} judge: ${this._judgeMap[((px) + (py))]}`;
 
         if (this._position.x % Settings.ChipSize === 0 && this._position.y % Settings.ChipSize === 0) {
             this._direction.x = 0;
@@ -44,16 +63,24 @@ export class Player extends GameObject {
 
             if (engine.getKeyDown(KeyCode.up)) {
                 this._character.setDirection(3);
-                this._direction.y = -1;
+                if (this.wallCheck(0, -1)) {
+                    this._direction.y = -1;
+                }
             } else if (engine.getKeyDown(KeyCode.down)) {
                 this._character.setDirection(0);
-                this._direction.y = 1;
+                if (this.wallCheck(0, 1)) {
+                    this._direction.y = 1;
+                }
             } else if (engine.getKeyDown(KeyCode.left)) {
                 this._character.setDirection(1);
-                this._direction.x = -1;
+                if (this.wallCheck(-1, 0)) {
+                    this._direction.x = -1;
+                }
             } else if (engine.getKeyDown(KeyCode.right)) {
                 this._character.setDirection(2);
-                this._direction.x = 1;
+                if (this.wallCheck(1, 0)) {
+                    this._direction.x = 1;
+                }
             }
 
             this._position.x += this._direction.x * this._walkSpeed;
@@ -62,11 +89,5 @@ export class Player extends GameObject {
             this._position.x += this._direction.x * this._walkSpeed;
             this._position.y += this._direction.y * this._walkSpeed;
         }
-    }
-
-    private wallCheck(direction: number): boolean {
-        return (
-            true
-        )
     }
 }

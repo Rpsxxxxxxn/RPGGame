@@ -23,6 +23,10 @@ export class GameObject {
     public onUpdate(engine: Main): void {
 
     }
+    
+    public onDestroy(engine: Main): void {
+        
+    }
 
     public get getId() {
         return this._id;

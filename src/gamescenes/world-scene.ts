@@ -16,7 +16,6 @@ export class WorldScene extends BaseScene {
     public onInit(): void {
         this.addObject(new FieldMap(this._engine));
         this.addObject(new Player(this._engine));
-        this.addObject(new Enemy(this._engine));
         this.addObject(new ItemNPC(this._engine));
         this.addObject(new WeaponNPC(this._engine));
         this.addObject(new QuestGuideNPC(this._engine));
