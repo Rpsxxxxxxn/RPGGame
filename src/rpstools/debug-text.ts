@@ -1,10 +1,10 @@
-import * as PIXI from 'pixi.js'
+import { Text } from "pixi.js";
 
 export class DebugText {
-    private _text: PIXI.Text;
+    private _text: Text;
 
     constructor() {
-        this._text = new PIXI.Text('', { 
+        this._text = new Text('', { 
             fontFamily: 'Arial',
             fontSize: 24,
             fill: 0xFFFFFF,
@@ -16,7 +16,7 @@ export class DebugText {
         this._text.text = value;
     }
 
-    public get getText(): PIXI.Text {
+    public get getText(): Text {
         return this._text;
     }
 }

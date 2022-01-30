@@ -1,7 +1,5 @@
-import { GameField } from './../rpstools/game-field';
-import * as PIXI from 'pixi.js'
-import { GameObject, ObjectType } from "../rpstools/base-object";
-import { Settings } from '../rpstools/constants';
+import { GameField } from '../rpstools/game/game-field';
+import { GameObject, ObjectType } from "../rpstools/game/base-object";
 import { Main } from '../rpstools/main';
 
 export class FieldMap extends GameObject {

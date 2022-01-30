@@ -1,5 +1,5 @@
 import { GameObject } from './base-object';
-import { Main } from "./main";
+import { Main } from "../main";
 
 export enum SceneType {
     None,

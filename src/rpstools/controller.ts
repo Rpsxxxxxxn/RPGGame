@@ -3,6 +3,11 @@ export enum KeyCode {
     up,
     right,
     down,
+    enter = 13,
+    w = 87,
+    a = 65,
+    s = 83,
+    d = 68,
 }
 
 export class Keyboard {
@@ -13,11 +18,16 @@ export class Keyboard {
         this._oldKey = new Array<boolean>(256);
         this._newKey = new Array<boolean>(256);
 
+        for (let i = 0; i < 256; i++) {
+            this._newKey[i] = false;
+        }
+
         window.addEventListener("keydown", this.onKeyDown.bind(this));
         window.addEventListener("keyup", this.onKeyUp.bind(this));
     }
 
     public onUpdate() {
+        // console.log("")
         for (let i = 0; i < 256; i++) {
             this._oldKey[i] = this._newKey[i];
         }
@@ -28,6 +38,7 @@ export class Keyboard {
     }
 
     public getKeyPressed(keyCode: number): boolean {
+        // console.log(!this._oldKey[keyCode] && this._newKey[keyCode])
         return !this._oldKey[keyCode] && this._newKey[keyCode];
     }
 
@@ -36,10 +47,12 @@ export class Keyboard {
     }
 
     private onKeyDown(e: KeyboardEvent) {
+        // this._oldKey[e.keyCode] = this._newKey[e.keyCode];
         this._newKey[e.keyCode] = true;
     }
 
     private onKeyUp(e: KeyboardEvent) {
+        // this._oldKey[e.keyCode] = this._newKey[e.keyCode];
         this._newKey[e.keyCode] = false;
     }
 }

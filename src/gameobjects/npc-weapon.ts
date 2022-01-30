@@ -1,19 +1,18 @@
-import * as PIXI from 'pixi.js'
-import { Vector2 } from './../rpstools/math-helper';
-import { DebugText } from './../rpstools/debug-text';
-import { GameCharacter } from './../rpstools/game-character';
-import { Main } from './../rpstools/main';
-import { GameObject, ObjectType } from './../rpstools/base-object';
+import { Vector2 } from '../rpstools/math-helper';
+import { DebugText } from '../rpstools/debug-text';
+import { GameCharacter } from '../rpstools/game/game-character';
+import { Main } from '../rpstools/main';
+import { GameObject, ObjectType } from '../rpstools/game/base-object';
 import { Settings } from '../rpstools/constants';
 
-export class WeaponNPC extends GameObject {
+export class NPCWeapon extends GameObject {
     private _character: GameCharacter = new GameCharacter();
     private _debugText: DebugText = new DebugText;
     private _position: Vector2 = new Vector2();
     private _direction: Vector2 = new Vector2();
 
     constructor(engine: Main) {
-        super(ObjectType.Character, engine.getObjectId, WeaponNPC.name);
+        super(ObjectType.Character, engine.getObjectId, NPCWeapon.name);
         this._position.x = Settings.ChipSize * 2;
         this._position.y = Settings.ChipSize * 1;
     }

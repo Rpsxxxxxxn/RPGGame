@@ -1,8 +1,7 @@
-import * as PIXI from 'pixi.js'
-import { Vector2 } from './math-helper';
-import { Main } from './main';
-import { Settings, Field, MapInfo } from './constants';
-import { Sprite } from 'pixi.js';
+import { Vector2 } from '../math-helper';
+import { Main } from '../main';
+import { Settings, Field, MapInfo } from '../constants';
+import { Rectangle, Sprite } from 'pixi.js';
 
 export interface FieldInfo {
     select: number,
@@ -10,7 +9,6 @@ export interface FieldInfo {
 }
 
 export class GameField {
-    // private _field: Array<Array<FieldInfo>> = new Array<Array<FieldInfo>>();
     private _fieldScale = 1;
     private _mapinfo: any;
 
@@ -45,9 +43,9 @@ export class GameField {
                         let sourX = ~~(mapNum % 8);
                         let sourY = ~~(mapNum / 8);
                         let cloneTexture = texture.clone();
-                        cloneTexture.frame = new PIXI.Rectangle(sourX * sourSize, sourY * sourSize, sourSize, sourSize);
+                        cloneTexture.frame = new Rectangle(sourX * sourSize, sourY * sourSize, sourSize, sourSize);
                         cloneTexture.updateUvs()
-                        let sprite = new PIXI.Sprite(cloneTexture);
+                        let sprite = new Sprite(cloneTexture);
                         sprite.position.x = x * Settings.ChipSize;
                         sprite.position.y = y * Settings.ChipSize;
                         sprite.scale.set(this._fieldScale, this._fieldScale);

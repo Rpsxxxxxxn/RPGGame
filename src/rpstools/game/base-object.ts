@@ -1,8 +1,10 @@
-import { Main } from "./main";
+import { Selecter } from './../../gameobjects/selecter';
+import { Main } from "../main";
 
 export enum ObjectType {
     Character,
     Field,
+    Overlays,
 }
 
 export class GameObject {

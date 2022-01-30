@@ -1,16 +1,16 @@
+import { Container, Application, Texture } from 'pixi.js';
 import axios, { Axios } from 'axios';
-import * as PIXI from 'pixi.js'
 import { BattleScene } from "../gamescenes/battle-scene";
 import { WorldScene } from "../gamescenes/world-scene";
-import { BaseScene, SceneType } from "./base-scene";
+import { BaseScene, SceneType } from "./game/base-scene";
 import { MapInfo, Settings, TextureInfo, MapData } from './constants';
 import { Keyboard } from './controller';
 import { DebugText } from './debug-text';
 import { Timer } from './timer';
 
 export class Main {
-    private _application: PIXI.Application;
-    private _globalContainer: PIXI.Container;
+    private _application: Application;
+    private _globalContainer: Container;
     private _debugText: DebugText[] = [];
     private _scene: BaseScene = new WorldScene(this);
     private _nowScene: SceneType = SceneType.None;
@@ -23,14 +23,14 @@ export class Main {
     private _framerate: DebugText = new DebugText;
 
     constructor() {
-        this._application = new PIXI.Application({
+        this._application = new Application({
             width: Settings.GameWidthSize,
             height: Settings.GameHeightSize,
             backgroundColor: Settings.GameBackgroundColor
         });
         document.body.appendChild(this._application.view);
 
-        this._globalContainer = new PIXI.Container();
+        this._globalContainer = new Container();
     }
 
     /**
@@ -38,6 +38,7 @@ export class Main {
      */
     public async load() {
         await this.addMapJson('./assets/json/town1.json');
+        await this.addTexture('./assets/images/messagebox.png');
         await this.addTexture('./assets/images/char01.png');
         await this.addTexture('./assets/images/char02.png');
         await this.addTexture('./assets/images/char03.png');
@@ -59,8 +60,7 @@ export class Main {
      * 更新処理
      */
     public mainloop(): void {
-        this._framerate.setText = (~~this._application.ticker.FPS).toString();
-        this._keyboard.onUpdate();
+        this._framerate.setText = `FPS: ${(~~this._application.ticker.FPS)}`;
         this._timer.onUpdate();
         this.changeScene();
 
@@ -77,6 +77,8 @@ export class Main {
         }
 
         this._application.renderer.render(this._globalContainer);
+
+        this._keyboard.onUpdate();
         requestAnimationFrame(this.mainloop.bind(this));
     }
 
@@ -108,7 +110,7 @@ export class Main {
     public async addTexture(name: string) {
         let texture: TextureInfo = {
             name: name,
-            texture: await PIXI.Texture.fromURL(name)
+            texture: await Texture.fromURL(name)
         }
         this._textures.push(texture);
     }
@@ -140,7 +142,7 @@ export class Main {
      * @param name 
      * @returns 
      */
-    public getTexture(name: string): PIXI.Texture | undefined {
+    public getTexture(name: string): Texture | undefined {
         let value = this._textures.find((value) => value.name === name);
         if (value) {
             return value.texture

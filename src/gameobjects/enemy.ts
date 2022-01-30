@@ -1,9 +1,8 @@
 import { Vector2 } from './../rpstools/math-helper';
-import * as PIXI from 'pixi.js'
 import { DebugText } from './../rpstools/debug-text';
-import { GameCharacter } from './../rpstools/game-character';
+import { GameCharacter } from '../rpstools/game/game-character';
 import { Main } from './../rpstools/main';
-import { GameObject, ObjectType } from './../rpstools/base-object';
+import { GameObject, ObjectType } from '../rpstools/game/base-object';
 import { Settings } from '../rpstools/constants';
 
 export class Enemy extends GameObject {

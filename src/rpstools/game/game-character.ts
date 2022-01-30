@@ -1,10 +1,10 @@
-import * as PIXI from 'pixi.js'
-import { Vector2 } from './math-helper';
-import { Main } from './main';
-import { Settings } from './constants';
+import { Vector2 } from '../math-helper';
+import { Main } from '../main';
+import { Settings } from '../constants';
+import { Rectangle, Sprite } from 'pixi.js';
 
 export class GameCharacter {
-    private _sprite: PIXI.Sprite = new PIXI.Sprite;
+    private _sprite: Sprite = new Sprite;
     private _sourSize: number = 0;
     private _frameCount: number = 0;
     private _frameTime: number = 0;
@@ -22,9 +22,9 @@ export class GameCharacter {
         const charTexture = engine.getTexture(name);
         if (charTexture) {
             let cloneTexture = charTexture.clone();
-            cloneTexture.frame = new PIXI.Rectangle(0, 0, sourSize, sourSize);
+            cloneTexture.frame = new Rectangle(0, 0, sourSize, sourSize);
             cloneTexture.updateUvs()
-            this._sprite = new PIXI.Sprite(cloneTexture);
+            this._sprite = new Sprite(cloneTexture);
             engine.addChild(this._sprite);
         }
     }
@@ -46,7 +46,7 @@ export class GameCharacter {
         this._frameTime += engine.getDeltaTime;
 
         // console.log((~~(this._charSelect / 12)) * 3)
-        this._sprite.texture.frame = new PIXI.Rectangle(
+        this._sprite.texture.frame = new Rectangle(
             Settings.ChipSize * (this._frameCount + (this._charSelect % 12)),
             Settings.ChipSize * (this._frameDirection + (~~(this._charSelect / 12) * 4)),
             Settings.ChipSize, Settings.ChipSize);

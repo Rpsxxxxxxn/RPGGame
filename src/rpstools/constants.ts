@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import { Texture } from "pixi.js"
 
 export const Settings = {
     GameWidthSize: 48 * 18,
@@ -20,7 +20,7 @@ export const Character = {
 
 export interface TextureInfo {
     name: string;
-    texture: PIXI.Texture;
+    texture: Texture;
 }
 
 export interface MapData {
