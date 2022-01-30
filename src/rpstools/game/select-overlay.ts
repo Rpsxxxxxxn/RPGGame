@@ -38,6 +38,8 @@ export class SelectOverlay {
     private _selectbox: SelectBox = new SelectBox;
     private _maxSelect: number = 3;
     private _visible: boolean = false;
+    private _messages: string[] = [];
+    private _messagesText: Text[] = [];
 
     constructor() {
     }
@@ -50,21 +52,23 @@ export class SelectOverlay {
     }
 
     public selectIndex(engine: Main): number {
-        if (engine.getKeyPressed(KeyCode.up)) {
-            if (this._select > 0) {
-                this._select--;
+        if (this._visible) {
+            if (engine.getKeyPressed(KeyCode.up)) {
+                if (this._select > 0) {
+                    this._select--;
+                }
+            } else if (engine.getKeyPressed(KeyCode.down)) {
+                if (this._select < this._maxSelect - 1) {
+                    this._select++;
+                }
             }
-        } else if (engine.getKeyPressed(KeyCode.down)) {
-            if (this._select < this._maxSelect - 1) {
-                this._select++;
+
+            this._selectGraphics.position.x = (Settings.ChipSize * 0.25) + (Settings.ChipSize * 16);
+            this._selectGraphics.position.y = (Settings.ChipSize * 9) + (Settings.ChipSize * 0.4) + (this._select * Settings.ChipSize);
+
+            if (engine.getKeyPressed(KeyCode.enter)) {
+                return this._select;
             }
-        }
-
-        this._selectGraphics.position.x = (Settings.ChipSize * 0.25) + (Settings.ChipSize * 16);
-        this._selectGraphics.position.y = (Settings.ChipSize * 9) + (Settings.ChipSize * 0.4) + (this._select * Settings.ChipSize);
-
-        if (engine.getKeyPressed(KeyCode.enter)) {
-            return this._select;
         }
         return -1;
     }
@@ -114,11 +118,13 @@ export class SelectOverlay {
     public createGraphics(engine: Main): void {
         this._graphics.beginFill(0x000000);
         this._graphics.alpha = 0.5;
+        this._graphics.visible = true;
         this._graphics.drawRect(0, Settings.ChipSize * 9, Settings.ChipSize * Field.Height, Settings.ChipSize * 3);
         this._graphics.drawRect(Settings.ChipSize * 13, Settings.ChipSize * 9, Settings.ChipSize * Field.Width, Settings.ChipSize * 3);
         this._container.addChild(this._graphics);
 
         this._selectGraphics.beginFill(0xFFFFFF);
+        this._selectGraphics.visible = true;
         this._selectGraphics.drawRect(0, 0, Settings.ChipSize * .25, Settings.ChipSize * .25);
         this._container.addChild(this._selectGraphics);
 
@@ -129,8 +135,23 @@ export class SelectOverlay {
                 fill: 0xFFFFFF,
                 align: 'center'
             });
+            text.visible = true;
             text.position.x = (Settings.ChipSize * 0.25) + (Settings.ChipSize * 13);
             text.position.y = ((Settings.ChipSize * 9) + (Settings.ChipSize * 0.25) + (i * Settings.ChipSize));
+            this._container.addChild(text);
+        }
+        
+        for (let i = 0; i < 3; i++) {
+            let text = new Text('', { 
+                fontFamily: 'Arial',
+                fontSize: 24,
+                fill: 0xFFFFFF,
+                align: 'center'
+            });
+            text.visible = true;
+            text.position.x = (Settings.ChipSize * 0.25);
+            text.position.y = ((Settings.ChipSize * 9) + (Settings.ChipSize * 0.25) + (i * Settings.ChipSize));
+            this._messagesText.push(text);
             this._container.addChild(text);
         }
 
@@ -141,12 +162,26 @@ export class SelectOverlay {
         this._maxSelect = value;
     }
     
-    public addText(value: string) {
+    public addSelectText(value: string) {
         this._text.push(value);
+    }
+
+    public addMessageText(value: string) {
+        if (this._messages.length >= 3) {
+            this._messages.shift();
+        }
+        this._messages.push(value);
+
+        for (let i = 0; i < this._messages.length; i++) {
+            this._messagesText[i].text = this._messages[i];
+        }
     }
 
     public changeVisible() {
         this._visible = !this._visible;
+        if (!this._visible) {
+            this._select = 0;
+        }
         this._container.visible = this._visible;
     }
 }
