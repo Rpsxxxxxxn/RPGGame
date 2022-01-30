@@ -17,6 +17,7 @@
     "webpack-dev-server": "^4.7.3"
   },
   "dependencies": {
+    "axios": "^0.25.0",
     "pixi.js": "^6.2.2",
     "ts-loader": "^9.2.6",
     "webpack": "^5.67.0",
