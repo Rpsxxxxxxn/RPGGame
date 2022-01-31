@@ -227,16 +227,16 @@ export class Main {
      * @param engine 
      * @returns 
      */
-    public selectIndex(engine: Main): number {
-        return this._selectOverlay.selectIndex(engine);
+    public selectIndex(): number {
+        return this._selectOverlay.selectIndex(this);
     }
     
-    public setTexture(engine: Main, name: string, sourSize: number) {
-        this._selectOverlay.setTexture(engine, name, sourSize);
+    public setTexture(name: string, sourSize: number) {
+        this._selectOverlay.setTexture(this, name, sourSize);
     }
 
-    public createGraphics(engine: Main): void {
-        this._selectOverlay.createGraphics(engine);
+    public createGraphics(): void {
+        this._selectOverlay.createGraphics(this);
     }
 
     public setCharacterType(type: CharacterType) {
@@ -277,5 +277,13 @@ export class Main {
 
     public maxSelect(value: number) {
         this._selectOverlay.maxSelect = value;
+    }
+
+    public getTalkPlayerType(mx: number, my: number): CharacterType {
+        return this._selectOverlay.getTalkPlayerType(mx, my);
+    }
+
+    public isSelectVisible() {
+        return this._selectOverlay.isVisible();
     }
 }

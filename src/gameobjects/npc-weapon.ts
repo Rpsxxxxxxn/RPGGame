@@ -1,3 +1,4 @@
+import { CharacterType } from './../rpstools/game/game-character';
 import { Vector2 } from '../rpstools/math-helper';
 import { DebugText } from '../rpstools/debug-text';
 import { GameCharacter } from '../rpstools/game/game-character';
@@ -21,6 +22,10 @@ export class NPCWeapon extends GameObject {
         this._character.setTexture(engine, './assets/images/char01.png', Settings.ChipSize);
         this._character.selectCharacter(7);
         engine.addText(this._debugText);
+        engine.setTalkPlayerInfo({
+            characterType: CharacterType.NPCWeapon,
+            position: this._position
+        });
     }
 
     public onUpdate(engine: Main): void {

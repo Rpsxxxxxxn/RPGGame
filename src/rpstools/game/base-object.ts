@@ -1,4 +1,4 @@
-import { Selecter } from './../../gameobjects/selecter';
+import { Container } from 'pixi.js';
 import { Main } from "../main";
 
 export enum ObjectType {

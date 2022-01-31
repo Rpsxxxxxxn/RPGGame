@@ -1,5 +1,7 @@
+import { Container } from 'pixi.js';
 import { GameObject } from './base-object';
 import { Main } from "../main";
+import { DisplayObject } from 'pixi.js';
 
 export enum SceneType {
     None,
@@ -9,6 +11,7 @@ export enum SceneType {
 
 export class BaseScene {
     protected _engine: Main;
+    protected _container: Container = new Container;
     private _type: SceneType;
     private _objects: GameObject[] = [];
 
@@ -65,5 +68,13 @@ export class BaseScene {
                 this._objects.splice(index, 1);
             }
         }
+    }
+
+    public addChild(object: DisplayObject) {
+        this._container.addChild(object);
+    }
+
+    public removeChild(object: DisplayObject) {
+        this._container.removeChild(object);
     }
 }

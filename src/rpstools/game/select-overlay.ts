@@ -91,7 +91,7 @@ export class SelectOverlay {
         return -1;
     }
     
-    public setTexture(engine: Main, name: string, sourSize: number) {
+    public setTexture(engine: Main, name: string, sourSize: number): void {
         this._sourSize = sourSize;
 
         const texture = engine.getTexture(name);
@@ -182,26 +182,39 @@ export class SelectOverlay {
         this._maxSelect = value;
     }
 
-    public setCharacterType(type: CharacterType) {
+    public setCharacterType(type: CharacterType): void {
         this._characterType = type;
     }
 
-    public setTalkPlayerInfo(value: TalkPlayerInfo) {
+    public setTalkPlayerInfo(value: TalkPlayerInfo): void {
         this._talkPlayerInfo.push(value);
     }
 
-    public setSelectText(index: number, value: string) {
+    public getTalkPlayerType(mx: number, my: number): CharacterType {
+        for (let i = 0; i < this._talkPlayerInfo.length; i++) {
+            let pos = this._talkPlayerInfo[i].position;
+            let tmx = ~~(pos.x / Settings.ChipSize);
+            let tmy = ~~(pos.y / Settings.ChipSize);
+            if (mx === tmx && my === tmy) {
+                this.changeVisible();
+                return this._talkPlayerInfo[i].characterType;
+            }
+        }
+        return CharacterType.None;
+    }
+
+    public setSelectText(index: number, value: string): void {
         this._selectText[index].text = value;
     }
     
-    public addSelectText(value: string) {
+    public addSelectText(value: string): void {
         if (this._text.length >= 3) {
             this._text.shift();
         }
         this._text.push(value);
     }
 
-    public addMessageText(value: string) {
+    public addMessageText(value: string): void {
         if (this._messages.length >= 3) {
             this._messages.shift();
         }
@@ -212,7 +225,7 @@ export class SelectOverlay {
         }
     }
 
-    public changeVisible() {
+    public changeVisible(): void {
         this._visible = !this._visible;
         if (!this._visible) {
             this._selectIndex = 0;
@@ -220,19 +233,23 @@ export class SelectOverlay {
         this._container.visible = this._visible;
     }
 
-    public clearAll() {
+    public isVisible(): boolean {
+        return this._visible;
+    }
+
+    public clearAll(): void {
         this._selectIndex = 0;
         this.clearMessage();
         this.clearSelect();
     }
 
-    public clearMessage() {
+    public clearMessage(): void {
         for (let i = 0; i < this._messages.length; i++) {
             this._messagesText[i].text = '';
         }
     }
 
-    public clearSelect() {
+    public clearSelect(): void {
         for (let i = 0; i < this._messages.length; i++) {
             this._selectText[i].text = '';
         }
