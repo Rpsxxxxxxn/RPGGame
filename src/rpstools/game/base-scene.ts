@@ -30,7 +30,18 @@ export class BaseScene {
     public onDestroy(): void {
         this._objects.forEach((object) => {
             object.onDestroy(this._engine);
-        })
+            this.removeObject(object);
+        });
+    }
+
+    // public getObject(id: number) {
+    //     let value = this._objects.find((value) => value.getId === id);
+    //     return value;
+    // }
+
+    public getObject(name: string) {
+        let value = this._objects.find((value) => value.getName === name);
+        return value;
     }
 
     public addObject(object: GameObject): void {

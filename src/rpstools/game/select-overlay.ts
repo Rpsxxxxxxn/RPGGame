@@ -2,6 +2,8 @@ import { Settings, Field } from './../constants';
 import { Main } from './../main';
 import { Container, Sprite, Graphics, Text, Rectangle } from 'pixi.js';
 import { KeyCode } from '../controller';
+import { CharacterType } from './game-character';
+import { Vector2 } from '../math-helper';
 
 export enum BoxBoarder {
     leftTop,
@@ -12,6 +14,12 @@ export enum BoxBoarder {
     leftBottom,
     bottom,
     rightBottom,
+}
+
+export enum SelectType {
+    Select1,
+    Select2,
+    Close,
 }
 
 export class MessageBox {
@@ -25,13 +33,19 @@ export class SelectBox {
     public select: number = 0;
 }
 
+export interface TalkPlayerInfo {
+    characterType: number,
+    position: Vector2,
+}
+
 export class SelectOverlay {
-    private _select: number = 0;
+    private _selectIndex: number = 0;
     private _container: Container = new Container;
     private _graphics: Graphics = new Graphics;
     private _selectGraphics: Graphics = new Graphics;
     private _sprite: Sprite[] = [];
     private _text: string[] = [];
+    private _selectText: Text[] = [];
     private _sourSize: number = 0;
     private _sourBoxSize: number = 4;
     private _messagebox: MessageBox = new MessageBox;
@@ -40,9 +54,10 @@ export class SelectOverlay {
     private _visible: boolean = false;
     private _messages: string[] = [];
     private _messagesText: Text[] = [];
+    private _characterType: CharacterType = CharacterType.None;
+    private _talkPlayerInfo: TalkPlayerInfo[] = [];
 
-    constructor() {
-    }
+    constructor() {}
     
     public onInit(engine: Main): void {
         
@@ -54,20 +69,23 @@ export class SelectOverlay {
     public selectIndex(engine: Main): number {
         if (this._visible) {
             if (engine.getKeyPressed(KeyCode.up)) {
-                if (this._select > 0) {
-                    this._select--;
+                if (this._selectIndex > 0) {
+                    this._selectIndex--;
                 }
             } else if (engine.getKeyPressed(KeyCode.down)) {
-                if (this._select < this._maxSelect - 1) {
-                    this._select++;
+                if (this._selectIndex < this._maxSelect - 1) {
+                    this._selectIndex++;
                 }
             }
 
             this._selectGraphics.position.x = (Settings.ChipSize * 0.25) + (Settings.ChipSize * 16);
-            this._selectGraphics.position.y = (Settings.ChipSize * 9) + (Settings.ChipSize * 0.4) + (this._select * Settings.ChipSize);
+            this._selectGraphics.position.y = (Settings.ChipSize * 9) + (Settings.ChipSize * 0.4) + (this._selectIndex * Settings.ChipSize);
 
             if (engine.getKeyPressed(KeyCode.enter)) {
-                return this._select;
+                if (this._selectIndex === SelectType.Close) {
+                    this.changeVisible();
+                }
+                return this._selectIndex;
             }
         }
         return -1;
@@ -138,10 +156,11 @@ export class SelectOverlay {
             text.visible = true;
             text.position.x = (Settings.ChipSize * 0.25) + (Settings.ChipSize * 13);
             text.position.y = ((Settings.ChipSize * 9) + (Settings.ChipSize * 0.25) + (i * Settings.ChipSize));
+            this._selectText.push(text);
             this._container.addChild(text);
         }
         
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < this._maxSelect; i++) {
             let text = new Text('', { 
                 fontFamily: 'Arial',
                 fontSize: 24,
@@ -155,14 +174,30 @@ export class SelectOverlay {
             this._container.addChild(text);
         }
 
+        this._container.visible = this._visible;
         engine.addChild(this._container);
     }
 
     public set maxSelect(value: number) {
         this._maxSelect = value;
     }
+
+    public setCharacterType(type: CharacterType) {
+        this._characterType = type;
+    }
+
+    public setTalkPlayerInfo(value: TalkPlayerInfo) {
+        this._talkPlayerInfo.push(value);
+    }
+
+    public setSelectText(index: number, value: string) {
+        this._selectText[index].text = value;
+    }
     
     public addSelectText(value: string) {
+        if (this._text.length >= 3) {
+            this._text.shift();
+        }
         this._text.push(value);
     }
 
@@ -180,8 +215,26 @@ export class SelectOverlay {
     public changeVisible() {
         this._visible = !this._visible;
         if (!this._visible) {
-            this._select = 0;
+            this._selectIndex = 0;
         }
         this._container.visible = this._visible;
+    }
+
+    public clearAll() {
+        this._selectIndex = 0;
+        this.clearMessage();
+        this.clearSelect();
+    }
+
+    public clearMessage() {
+        for (let i = 0; i < this._messages.length; i++) {
+            this._messagesText[i].text = '';
+        }
+    }
+
+    public clearSelect() {
+        for (let i = 0; i < this._messages.length; i++) {
+            this._selectText[i].text = '';
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { Vector2 } from '../math-helper';
 import { Main } from '../main';
-import { Settings, Field, MapInfo } from '../constants';
+import { Settings, Field } from '../constants';
 import { Rectangle, Sprite } from 'pixi.js';
 
 export interface FieldInfo {

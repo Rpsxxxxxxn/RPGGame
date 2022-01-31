@@ -1,5 +1,5 @@
 import { SelectOverlay } from './../rpstools/game/select-overlay';
-import { MapData, Field } from './../rpstools/constants';
+import { Field } from './../rpstools/constants';
 import { Vector2 } from '../rpstools/math-helper';
 import { KeyCode } from '../rpstools/controller';
 import { GameObject, ObjectType } from '../rpstools/game/base-object';
@@ -7,6 +7,7 @@ import { Main } from '../rpstools/main';
 import { Character, Settings } from '../rpstools/constants';
 import { GameCharacter } from '../rpstools/game/game-character';
 import { DebugText } from '../rpstools/debug-text';
+import { NPCQuestGuide } from './npc-questguide';
 
 export class Player extends GameObject {
     private _character: GameCharacter = new GameCharacter();
@@ -14,9 +15,6 @@ export class Player extends GameObject {
     private _position: Vector2 = new Vector2();
     private _direction: Vector2 = new Vector2();
     private _walkSpeed: number = 2;
-    private _questSelect: SelectOverlay = new SelectOverlay;
-    private _weaponSelect: SelectOverlay = new SelectOverlay;
-    private _itemSelect: SelectOverlay = new SelectOverlay;
     private _judgeMap: any;
 
     constructor(engine: Main) {
@@ -36,6 +34,10 @@ export class Player extends GameObject {
         this._character.setTexture(engine, './assets/images/char01.png', Settings.ChipSize);
         this._character.selectCharacter(2);
         engine.addText(this._debugText);
+
+        setTimeout(() => {
+            this.startTalkNPC(engine)
+        }, 2000);
     }
 
     public onUpdate(engine: Main): void {
@@ -45,6 +47,14 @@ export class Player extends GameObject {
     }
 
     public onDestroy(engine: Main): void {
+    }
+
+    /**
+     * NPCとおしゃべりを開始
+     */
+    private startTalkNPC(engine: Main): void {
+        const questguide = engine.getObject(NPCQuestGuide.name);
+        console.log(questguide)
     }
 
     private wallCheck(dx: number, dy: number): boolean {

@@ -3,24 +3,27 @@ import axios, { Axios } from 'axios';
 import { BattleScene } from "../gamescenes/battle-scene";
 import { WorldScene } from "../gamescenes/world-scene";
 import { BaseScene, SceneType } from "./game/base-scene";
-import { MapInfo, Settings, TextureInfo, MapData } from './constants';
+import { Settings } from './constants';
 import { Keyboard } from './controller';
 import { DebugText } from './debug-text';
 import { Timer } from './timer';
+import { AssetsManager, MapInfo } from './assets-manager';
+import { SelectOverlay, TalkPlayerInfo } from './game/select-overlay';
+import { CharacterType } from './game/game-character';
 
 export class Main {
     private _application: Application;
     private _globalContainer: Container;
     private _debugText: DebugText[] = [];
-    private _scene: BaseScene = new WorldScene(this);
+    private _keyboard: Keyboard;
+    private _timer: Timer;
+    private _framerate: DebugText;
+    private _assetsManager: AssetsManager;
+    private _scene: BaseScene;
+    private _selectOverlay: SelectOverlay;
+    private _gameCounter: number = 0;
     private _nowScene: SceneType = SceneType.None;
     private _nextScene: SceneType = SceneType.World;
-    private _keyboard: Keyboard = new Keyboard();
-    private _gameCounter: number = 0;
-    private _timer: Timer = new Timer();
-    private _textures: TextureInfo[] = [];
-    private _mapinfos: MapInfo[] = [];
-    private _framerate: DebugText = new DebugText;
 
     constructor() {
         this._application = new Application({
@@ -30,23 +33,20 @@ export class Main {
         });
         document.body.appendChild(this._application.view);
 
+        this._scene = new WorldScene(this);
+        this._assetsManager = new AssetsManager();
         this._globalContainer = new Container();
+        this._keyboard = new Keyboard();
+        this._timer = new Timer();
+        this._framerate = new DebugText();
+        this._selectOverlay = new SelectOverlay();
     }
 
     /**
      * 画像等の読み込み
      */
     public async load() {
-        await this.addMapJson('./assets/json/town1.json');
-        await this.addTexture('./assets/images/messagebox.png');
-        await this.addTexture('./assets/images/char01.png');
-        await this.addTexture('./assets/images/char02.png');
-        await this.addTexture('./assets/images/char03.png');
-        await this.addTexture('./assets/images/char04.png');
-        await this.addTexture('./assets/images/town01.png');
-        await this.addTexture('./assets/images/town02.png');
-        await this.addTexture('./assets/images/town03.png');
-        await this.addTexture('./assets/images/town04.png');
+        await this._assetsManager.onLoad();
     }
 
     /**
@@ -108,11 +108,7 @@ export class Main {
      * @param name
      */
     public async addTexture(name: string) {
-        let texture: TextureInfo = {
-            name: name,
-            texture: await Texture.fromURL(name)
-        }
-        this._textures.push(texture);
+        this._assetsManager.addTexture(name);
     }
 
     /**
@@ -120,21 +116,7 @@ export class Main {
      * @param name 
      */
     public async addMapJson(name: string) {
-        let info = await axios.get(name);
-        if (info) {
-            let mapdatas: MapData[] = [];
-            let mapinfo: MapInfo = {
-                name: name,
-                data: mapdatas,
-            }
-            for (let json of info.data.mapinfo) {
-                mapdatas.push({
-                    layer: json.layer,
-                    map: json.data
-                })
-            }
-            this._mapinfos.push(mapinfo);
-        }
+        this._assetsManager.addMapJson(name);
     }
 
     /**
@@ -143,11 +125,7 @@ export class Main {
      * @returns 
      */
     public getTexture(name: string): Texture | undefined {
-        let value = this._textures.find((value) => value.name === name);
-        if (value) {
-            return value.texture
-        }
-        return value;
+        return this._assetsManager.getTexture(name);
     }
 
     /**
@@ -155,8 +133,7 @@ export class Main {
      * @param name 
      */
     public getMapJson(name: string): MapInfo | undefined {
-        let value = this._mapinfos.find((value) => value.name === name);
-        return value;
+        return this._assetsManager.getMapJson(name);
     }
 
     /**
@@ -234,5 +211,71 @@ export class Main {
         if (index >= 0) {
             this._debugText.splice(index, 1);
         }
+    }
+
+    /**
+     * オブジェクトの取得
+     * @param name 
+     * @returns 
+     */
+    public getObject(name: string) {
+        return this._scene.getObject(name);
+    }
+
+    /**
+     * 選択した番号の取得
+     * @param engine 
+     * @returns 
+     */
+    public selectIndex(engine: Main): number {
+        return this._selectOverlay.selectIndex(engine);
+    }
+    
+    public setTexture(engine: Main, name: string, sourSize: number) {
+        this._selectOverlay.setTexture(engine, name, sourSize);
+    }
+
+    public createGraphics(engine: Main): void {
+        this._selectOverlay.createGraphics(engine);
+    }
+
+    public setCharacterType(type: CharacterType) {
+        this._selectOverlay.setCharacterType(type);
+    }
+
+    public setTalkPlayerInfo(value: TalkPlayerInfo) {
+        this._selectOverlay.setTalkPlayerInfo(value);
+    }
+
+    public setSelectText(index: number, value: string) {
+        this._selectOverlay.setSelectText(index, value);
+    }
+    
+    public addSelectText(value: string) {
+        this._selectOverlay.addSelectText(value);
+    }
+
+    public addMessageText(value: string) {
+        this._selectOverlay.addMessageText(value);
+    }
+
+    public changeVisible() {
+        this._selectOverlay.changeVisible();
+    }
+
+    public clearSelectAll() {
+        this._selectOverlay.clearAll();
+    }
+
+    public clearMessage() {
+        this._selectOverlay.clearMessage();
+    }
+
+    public clearSelect() {
+        this._selectOverlay.clearSelect();
+    }
+
+    public maxSelect(value: number) {
+        this._selectOverlay.maxSelect = value;
     }
 }

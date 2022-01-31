@@ -3,6 +3,15 @@ import { Main } from '../main';
 import { Settings } from '../constants';
 import { Rectangle, Sprite } from 'pixi.js';
 
+export enum CharacterType {
+    None,
+    Player,
+    Enemy,
+    NPCItem,
+    NPCQuestGuide,
+    NPCWeapon
+}
+
 export class GameCharacter {
     private _sprite: Sprite = new Sprite;
     private _sourSize: number = 0;
@@ -45,7 +54,6 @@ export class GameCharacter {
     public spriteAnimation(engine: Main) {
         this._frameTime += engine.getDeltaTime;
 
-        // console.log((~~(this._charSelect / 12)) * 3)
         this._sprite.texture.frame = new Rectangle(
             Settings.ChipSize * (this._frameCount + (this._charSelect % 12)),
             Settings.ChipSize * (this._frameDirection + (~~(this._charSelect / 12) * 4)),

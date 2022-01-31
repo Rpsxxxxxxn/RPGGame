@@ -33,4 +33,8 @@ export class GameObject {
     public get getId() {
         return this._id;
     }
+
+    public get getName() {
+        return this._name;
+    }
 }

@@ -1,11 +1,14 @@
 import { Main } from '../rpstools/main';
 import { GameObject, ObjectType } from '../rpstools/game/base-object';
 import { Container } from 'pixi.js';
-import { SelectOverlay } from '../rpstools/game/select-overlay';
+import { SelectOverlay, SelectType } from '../rpstools/game/select-overlay';
 
 export class Selecter extends GameObject {
     private _container: Container = new Container;
-    private _select: SelectOverlay = new SelectOverlay;
+    private _battleSelect: SelectOverlay = new SelectOverlay;
+    private _questSelect: SelectOverlay = new SelectOverlay;
+    private _weaponSelect: SelectOverlay = new SelectOverlay;
+    private _itemSelect: SelectOverlay = new SelectOverlay;
     private _count: number = 0;
 
     constructor(engine: Main) {
@@ -13,28 +16,23 @@ export class Selecter extends GameObject {
     }
 
     public onInit(engine: Main): void {
-        // this._select.setTexture();
-        this._select.addSelectText('ダンジョン');
-        this._select.addSelectText('ＰＶＰ');
-        this._select.addSelectText('もどる');
-        this._select.createGraphics(engine);
-        this._select.changeVisible();
-        this._select.addMessageText('1');
-        this._select.addMessageText('2');
-        this._select.addMessageText('3');
-        // this._select.addMessageText('4');
+        this._questSelect.createGraphics(engine);
+        this._questSelect.addMessageText('1');
+        this._questSelect.addMessageText('2');
+        this._questSelect.addMessageText('3');
+        this._questSelect.setSelectText(0, 'ダンジョン');
+        this._questSelect.setSelectText(1, 'ＰＶＰ');
+        this._questSelect.setSelectText(2, 'もどる');
+        this._questSelect.changeVisible();
     }
 
     public onUpdate(engine: Main): void {
-        let selected = this._select.selectIndex(engine);
+        let selected = this._questSelect.selectIndex(engine);
         switch (selected) {
-            case 0:
+            case SelectType.Select1:
                 break; 
-            case 1:
-                break; 
-            case 2:
-                this._select.changeVisible();
-                break; 
+            case SelectType.Select2:
+                break;
         }
 
         // this._count += 1234;
