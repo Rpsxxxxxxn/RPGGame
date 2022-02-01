@@ -2,6 +2,7 @@ import { Vector2 } from '../math-helper';
 import { Main } from '../main';
 import { Settings, Field } from '../constants';
 import { Rectangle, Sprite } from 'pixi.js';
+import { MapStage } from '../assets-manager';
 
 export interface FieldInfo {
     select: number,
@@ -16,8 +17,8 @@ export class GameField {
         
     }
 
-    setMapData(engine: Main, textureName: string) {
-        let mapinfo = engine.getMapJson(textureName);
+    setMapData(engine: Main, stage: MapStage) {
+        let mapinfo = engine.getMapJsonByStage(stage);
         if (mapinfo) {
             this._mapinfo = mapinfo;
             console.log(this._mapinfo)
@@ -49,7 +50,7 @@ export class GameField {
                         sprite.position.x = x * Settings.ChipSize;
                         sprite.position.y = y * Settings.ChipSize;
                         sprite.scale.set(this._fieldScale, this._fieldScale);
-                        engine.addChild(sprite);
+                        engine.addSceneChild(sprite);
                     }
                 }
             }

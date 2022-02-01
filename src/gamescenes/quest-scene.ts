@@ -7,10 +7,10 @@ import { Player } from './../gameobjects/player';
 import { FieldMap } from "../gameobjects/fieldmap";
 import { NPCQuestGuide } from '../gameobjects/npc-questguide';
 
-export class WorldScene extends BaseScene {
+export class QuestScene extends BaseScene {
 
     constructor(engine: Main) {
-        super(engine, SceneType.World);
+        super(engine, SceneType.Quest);
     }
 
     public onInit(): void {
@@ -18,9 +18,6 @@ export class WorldScene extends BaseScene {
 
         this.addObject(new FieldMap(this._engine));
         this.addObject(new Player(this._engine));
-        this.addObject(new NPCItem(this._engine));
-        this.addObject(new NPCWeapon(this._engine));
-        this.addObject(new NPCQuestGuide(this._engine));
         this.addObject(new Selecter(this._engine));
     }
 

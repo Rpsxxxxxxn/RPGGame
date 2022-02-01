@@ -36,35 +36,28 @@ export class SelectBox {
 export interface TalkPlayerInfo {
     characterType: number,
     position: Vector2,
+    messages: string[],
+    selects: string[]
 }
 
 export class SelectOverlay {
-    private _selectIndex: number = 0;
     private _container: Container = new Container;
     private _graphics: Graphics = new Graphics;
     private _selectGraphics: Graphics = new Graphics;
-    private _sprite: Sprite[] = [];
-    private _text: string[] = [];
     private _selectText: Text[] = [];
+    private _selectIndex: number = 0;
+    private _sprite: Sprite[] = [];
+    private _selects: string[] = [];
     private _sourSize: number = 0;
     private _sourBoxSize: number = 4;
     private _messagebox: MessageBox = new MessageBox;
-    private _selectbox: SelectBox = new SelectBox;
     private _maxSelect: number = 3;
     private _visible: boolean = false;
     private _messages: string[] = [];
     private _messagesText: Text[] = [];
-    private _characterType: CharacterType = CharacterType.None;
     private _talkPlayerInfo: TalkPlayerInfo[] = [];
 
     constructor() {}
-    
-    public onInit(engine: Main): void {
-        
-    }
-
-    public onUpdate(engine: Main): void {
-    }
 
     public selectIndex(engine: Main): number {
         if (this._visible) {
@@ -82,9 +75,7 @@ export class SelectOverlay {
             this._selectGraphics.position.y = (Settings.ChipSize * 9) + (Settings.ChipSize * 0.4) + (this._selectIndex * Settings.ChipSize);
 
             if (engine.getKeyPressed(KeyCode.enter)) {
-                if (this._selectIndex === SelectType.Close) {
-                    this.changeVisible();
-                }
+                // this.changeVisible();
                 return this._selectIndex;
             }
         }
@@ -147,7 +138,7 @@ export class SelectOverlay {
         this._container.addChild(this._selectGraphics);
 
         for (let i = 0; i < this._maxSelect; i++) {
-            let text = new Text(this._text[i], { 
+            let text = new Text(this._selects[i], { 
                 fontFamily: 'Arial',
                 fontSize: 24,
                 fill: 0xFFFFFF,
@@ -182,10 +173,6 @@ export class SelectOverlay {
         this._maxSelect = value;
     }
 
-    public setCharacterType(type: CharacterType): void {
-        this._characterType = type;
-    }
-
     public setTalkPlayerInfo(value: TalkPlayerInfo): void {
         this._talkPlayerInfo.push(value);
     }
@@ -197,6 +184,13 @@ export class SelectOverlay {
             let tmy = ~~(pos.y / Settings.ChipSize);
             if (mx === tmx && my === tmy) {
                 this.changeVisible();
+                
+                this._talkPlayerInfo[i].messages.forEach((value) => {
+                    this.addMessageText(value);
+                });
+                this._talkPlayerInfo[i].selects.forEach((value) => {
+                    this.addSelectText(value);
+                });
                 return this._talkPlayerInfo[i].characterType;
             }
         }
@@ -208,10 +202,14 @@ export class SelectOverlay {
     }
     
     public addSelectText(value: string): void {
-        if (this._text.length >= 3) {
-            this._text.shift();
+        if (this._selects.length >= 3) {
+            this._selects.shift();
         }
-        this._text.push(value);
+        this._selects.push(value);
+
+        for (let i = 0; i < this._selects.length; i++) {
+            this._selectText[i].text = this._selects[i];
+        }
     }
 
     public addMessageText(value: string): void {

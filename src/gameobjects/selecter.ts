@@ -13,12 +13,6 @@ export class Selecter extends GameObject {
 
     public onInit(engine: Main): void {
         engine.createGraphics();
-        engine.addMessageText('1');
-        engine.addMessageText('2');
-        engine.addMessageText('3');
-        engine.setSelectText(0, 'ダンジョン');
-        engine.setSelectText(1, 'ＰＶＰ');
-        engine.setSelectText(2, 'もどる');
         // engine.changeVisible();
     }
 

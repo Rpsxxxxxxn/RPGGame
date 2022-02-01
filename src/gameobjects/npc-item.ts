@@ -24,7 +24,9 @@ export class NPCItem extends GameObject {
         engine.addText(this._debugText);
         engine.setTalkPlayerInfo({
             characterType: CharacterType.NPCItem,
-            position: this._position
+            position: this._position,
+            messages: ['アイテム販売','今回はどうなさいましたか？',''],
+            selects: ['購入', '回復', 'もどる']
         });
     }
 

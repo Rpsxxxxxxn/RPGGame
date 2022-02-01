@@ -34,7 +34,7 @@ export class GameCharacter {
             cloneTexture.frame = new Rectangle(0, 0, sourSize, sourSize);
             cloneTexture.updateUvs()
             this._sprite = new Sprite(cloneTexture);
-            engine.addChild(this._sprite);
+            engine.addSceneChild(this._sprite);
         }
     }
 

@@ -1,13 +1,14 @@
 import { GameField } from '../rpstools/game/game-field';
 import { GameObject, ObjectType } from "../rpstools/game/base-object";
 import { Main } from '../rpstools/main';
+import { MapStage } from '../rpstools/assets-manager';
 
 export class FieldMap extends GameObject {
     private _field: GameField = new GameField();
 
     constructor(engine: Main) {
         super(ObjectType.Field, engine.getObjectId, 'Map');
-        this._field.setMapData(engine, './assets/json/town1.json');
+        this._field.setMapData(engine, MapStage.Town);
     }
 
     public onInit(engine: Main): void {

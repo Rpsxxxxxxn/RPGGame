@@ -1,3 +1,4 @@
+import { QuestScene } from './../gamescenes/quest-scene';
 import { Container, Application, Texture } from 'pixi.js';
 import axios, { Axios } from 'axios';
 import { BattleScene } from "../gamescenes/battle-scene";
@@ -7,9 +8,10 @@ import { Settings } from './constants';
 import { Keyboard } from './controller';
 import { DebugText } from './debug-text';
 import { Timer } from './timer';
-import { AssetsManager, MapInfo } from './assets-manager';
+import { AssetsManager, MapInfo, MapStage } from './assets-manager';
 import { SelectOverlay, TalkPlayerInfo } from './game/select-overlay';
 import { CharacterType } from './game/game-character';
+import { ShareData } from '../gameobjects/share-data';
 
 export class Main {
     private _application: Application;
@@ -24,6 +26,7 @@ export class Main {
     private _gameCounter: number = 0;
     private _nowScene: SceneType = SceneType.None;
     private _nextScene: SceneType = SceneType.World;
+    private _shareData: ShareData = new ShareData();
 
     constructor() {
         this._application = new Application({
@@ -33,7 +36,7 @@ export class Main {
         });
         document.body.appendChild(this._application.view);
 
-        this._scene = new WorldScene(this);
+        this._scene = new BattleScene(this);
         this._assetsManager = new AssetsManager();
         this._globalContainer = new Container();
         this._keyboard = new Keyboard();
@@ -93,6 +96,9 @@ export class Main {
                 case SceneType.World:
                     this._scene = new WorldScene(this);
                     break;
+                case SceneType.Quest:
+                    this._scene = new QuestScene(this)
+                    break;
                 case SceneType.Battle:
                     this._scene = new BattleScene(this)
                     break;
@@ -101,6 +107,10 @@ export class Main {
 
             this._scene.onInit();
         }
+    }
+
+    public setScene(type: number) {
+        this._nextScene = type;
     }
 
     /**
@@ -115,8 +125,8 @@ export class Main {
      * MAPJSONの追加
      * @param name 
      */
-    public async addMapJson(name: string) {
-        this._assetsManager.addMapJson(name);
+    public async addMapJson(stage: MapStage, name: string) {
+        this._assetsManager.addMapJson(stage, name);
     }
 
     /**
@@ -135,12 +145,39 @@ export class Main {
     public getMapJson(name: string): MapInfo | undefined {
         return this._assetsManager.getMapJson(name);
     }
+    /**
+     * MapJsonの取得
+     * @param name 
+     */
+    public getMapJsonByStage(stage: MapStage): MapInfo | undefined {
+        return this._assetsManager.getMapJsonByStage(stage);
+    }
 
     /**
      * 追加
      */
     public addChild(object: any): void {
         this._globalContainer.addChild(object);
+    }
+    
+    /**
+     * 削除
+     */
+     public removeChild(object: any): void {
+        this._globalContainer.removeChild(object);
+    }
+
+    /**
+     * シーン内追加
+     */
+    public addSceneChild(object: any): void {
+        this._scene.addChild(object);
+    }
+    /**
+     * シーン内削除
+     */
+    public removeSceneChild(object: any): void {
+        this._scene.removeChild(object);
     }
 
     /**
@@ -237,10 +274,6 @@ export class Main {
 
     public createGraphics(): void {
         this._selectOverlay.createGraphics(this);
-    }
-
-    public setCharacterType(type: CharacterType) {
-        this._selectOverlay.setCharacterType(type);
     }
 
     public setTalkPlayerInfo(value: TalkPlayerInfo) {

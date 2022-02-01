@@ -24,7 +24,9 @@ export class NPCQuestGuide extends GameObject {
         engine.addText(this._debugText);
         engine.setTalkPlayerInfo({
             characterType: CharacterType.NPCQuestGuide,
-            position: this._position
+            position: this._position,
+            messages: ['クエスト案内','今回はどうなさいましたか？',''],
+            selects: ['ダンジョン', 'PVP', 'もどる']
         });
     }
 

@@ -1,6 +1,12 @@
 import axios from "axios";
 import { Texture } from "pixi.js";
 
+export enum MapStage {
+    Town,
+    Stage1,
+    Stage2,
+}
+
 export interface TextureInfo {
     name: string;
     texture: Texture;
@@ -13,6 +19,7 @@ export interface MapData {
 
 export interface MapInfo {
     name: string;
+    stage: MapStage;
     data: MapData[];
 }
 
@@ -26,7 +33,8 @@ export class AssetsManager {
      * ロード処理
      */
     public async onLoad() {
-        await this.addMapJson('./assets/json/town1.json');
+        await this.addMapJson(MapStage.Town, './assets/json/town1.json');
+        await this.addMapJson(MapStage.Stage1, './assets/json/world1.json');
         await this.addTexture('./assets/images/messagebox.png');
         await this.addTexture('./assets/images/char01.png');
         await this.addTexture('./assets/images/char02.png');
@@ -56,12 +64,13 @@ export class AssetsManager {
      * MAPJSONの追加
      * @param name 
      */
-    public async addMapJson(name: string) {
+    public async addMapJson(stage: MapStage, name: string) {
         let mapJsonInfo = await axios.get(name);
         if (mapJsonInfo) {
             let mapdatas: MapData[] = [];
             let mapinfo: MapInfo = {
                 name: name,
+                stage: stage,
                 data: mapdatas,
             }
             for (let json of mapJsonInfo.data.mapinfo) {
@@ -93,6 +102,15 @@ export class AssetsManager {
      */
     public getMapJson(name: string): MapInfo | undefined {
         let value = this._mapinfos.find((value) => value.name === name);
+        return value;
+    }
+
+    /**
+     * MapJsonの取得
+     * @param name 
+     */
+    public getMapJsonByStage(stage: MapStage): MapInfo | undefined {
+        let value = this._mapinfos.find((value) => value.stage === stage);
         return value;
     }
 }

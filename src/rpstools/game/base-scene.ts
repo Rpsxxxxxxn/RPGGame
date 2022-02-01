@@ -6,12 +6,13 @@ import { DisplayObject } from 'pixi.js';
 export enum SceneType {
     None,
     World,
+    Quest,
     Battle,
 }
 
 export class BaseScene {
     protected _engine: Main;
-    protected _container: Container = new Container;
+    protected _container: Container = new Container();
     private _type: SceneType;
     private _objects: GameObject[] = [];
 
@@ -21,7 +22,7 @@ export class BaseScene {
     }
 
     public onInit(): void {
- 
+        this._engine.addChild(this._container);
     }
 
     public onUpdate(): void {
@@ -35,15 +36,11 @@ export class BaseScene {
             object.onDestroy(this._engine);
             this.removeObject(object);
         });
+        this._engine.removeChild(this._container);
     }
 
-    // public getObject(id: number) {
-    //     let value = this._objects.find((value) => value.getId === id);
-    //     return value;
-    // }
-
     public getObject(name: string) {
-        let value = this._objects.find((value) => value.getName === name);
+        let value: any = this._objects.find((value) => value.getName === name);
         return value;
     }
 

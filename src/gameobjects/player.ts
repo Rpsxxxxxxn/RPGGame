@@ -1,6 +1,7 @@
-import { NPCItem } from './npc-item';
 import { CharacterType } from './../rpstools/game/game-character';
-import { SelectOverlay } from './../rpstools/game/select-overlay';
+import { SelectType } from './../rpstools/game/select-overlay';
+import { SceneType } from './../rpstools/game/base-scene';
+import { Status } from './../rpstools/game/game-status';
 import { Field } from './../rpstools/constants';
 import { Vector2 } from '../rpstools/math-helper';
 import { KeyCode } from '../rpstools/controller';
@@ -9,8 +10,6 @@ import { Main } from '../rpstools/main';
 import { Character, Settings } from '../rpstools/constants';
 import { GameCharacter } from '../rpstools/game/game-character';
 import { DebugText } from '../rpstools/debug-text';
-import { NPCQuestGuide } from './npc-questguide';
-import { NPCWeapon } from './npc-weapon';
 
 export class Player extends GameObject {
     private _character: GameCharacter = new GameCharacter();
@@ -20,6 +19,8 @@ export class Player extends GameObject {
     private _talkDirection: Vector2 = new Vector2();
     private _walkSpeed: number = 2;
     private _judgeMap: any;
+    private _status: Status = new Status();
+    private _talkCompanion: number = 0;
 
     constructor(engine: Main) {
         super(ObjectType.Character, engine.getObjectId, Player.name);
@@ -34,8 +35,8 @@ export class Player extends GameObject {
         if (mapinfo) {
             this._judgeMap = mapinfo.data[1].map;
         }
-        this._character.setTexture(engine, './assets/images/char01.png', Settings.ChipSize);
-        this._character.selectCharacter(2);
+        this._character.setTexture(engine, './assets/images/char03.png', Settings.ChipSize);
+        this._character.selectCharacter(5);
         engine.addText(this._debugText);
     }
 
@@ -47,6 +48,7 @@ export class Player extends GameObject {
     }
 
     public onDestroy(engine: Main): void {
+        engine.removeText(this._debugText);
     }
 
     /**
@@ -56,9 +58,21 @@ export class Player extends GameObject {
         if (engine.getKeyPressed(KeyCode.enter) && !engine.isSelectVisible()) {
             let mx = ~~(this._position.x / Settings.ChipSize) + this._talkDirection.x;
             let my = ~~(this._position.y / Settings.ChipSize) + this._talkDirection.y;
-            let type = engine.getTalkPlayerType(mx, my);
+            this._talkCompanion = engine.getTalkPlayerType(mx, my);
+
         } else {
-            engine.selectIndex();
+            let select = engine.selectIndex();
+            if (select > -1) {
+                if (this._talkCompanion === CharacterType.NPCQuestGuide) {
+                    switch (select) {
+                        case SelectType.Select1:
+                            engine.setScene(SceneType.Quest);
+                            break;
+                    }
+                }
+                engine.changeVisible();
+            }
+            // console.log(select)
         }
     }
 

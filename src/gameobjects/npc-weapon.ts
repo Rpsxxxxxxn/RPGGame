@@ -19,12 +19,14 @@ export class NPCWeapon extends GameObject {
     }
     
     public onInit(engine: Main): void {
-        this._character.setTexture(engine, './assets/images/char01.png', Settings.ChipSize);
+        this._character.setTexture(engine, './assets/images/char02.png', Settings.ChipSize);
         this._character.selectCharacter(7);
         engine.addText(this._debugText);
         engine.setTalkPlayerInfo({
             characterType: CharacterType.NPCWeapon,
-            position: this._position
+            position: this._position,
+            messages: ['武器の強化','今回はどうなさいましたか？',''],
+            selects: ['強化', '超絶強化', 'もどる']
         });
     }
 
