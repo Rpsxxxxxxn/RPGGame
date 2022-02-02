@@ -189,6 +189,13 @@ export class Main {
         }
         return this._gameCounter;
     }
+
+    /**
+     * データ共有
+     */
+    public get shareData(): ShareData {
+        return this._shareData;
+    }
     
     /**
      * フレーム間の秒数 

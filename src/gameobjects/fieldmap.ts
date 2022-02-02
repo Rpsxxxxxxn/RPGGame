@@ -8,11 +8,21 @@ export class FieldMap extends GameObject {
 
     constructor(engine: Main) {
         super(ObjectType.Field, engine.getObjectId, 'Map');
-        this._field.setMapData(engine, MapStage.Town);
+        this._field.setMapData(engine, engine.shareData.nowStage);
     }
 
     public onInit(engine: Main): void {
-        this._field.setTexture(engine, './assets/images/town01.png', 32);
+        switch (engine.shareData.nowStage) {
+            case MapStage.Town:
+                this._field.setTexture(engine, './assets/images/town01.png', 32);
+                break;
+            case MapStage.Stage1:
+                this._field.setTexture(engine, './assets/images/town03.png', 32);
+                break;
+            case MapStage.Stage2:
+                this._field.setTexture(engine, './assets/images/town03.png', 32);
+                break;
+        }
     }
 
     public onUpdate(engine: Main): void {

@@ -10,6 +10,7 @@ import { Main } from '../rpstools/main';
 import { Character, Settings } from '../rpstools/constants';
 import { GameCharacter } from '../rpstools/game/game-character';
 import { DebugText } from '../rpstools/debug-text';
+import { MapStage } from '../rpstools/assets-manager';
 
 export class Player extends GameObject {
     private _character: GameCharacter = new GameCharacter();
@@ -31,7 +32,7 @@ export class Player extends GameObject {
     }
 
     public onInit(engine: Main): void {
-        let mapinfo = engine.getMapJson('./assets/json/town1.json');
+        let mapinfo = engine.getMapJsonByStage(engine.shareData.nowStage);
         if (mapinfo) {
             this._judgeMap = mapinfo.data[1].map;
         }
@@ -67,12 +68,12 @@ export class Player extends GameObject {
                     switch (select) {
                         case SelectType.Select1:
                             engine.setScene(SceneType.Quest);
+                            engine.shareData.nowStage = MapStage.Stage1;
                             break;
                     }
                 }
                 engine.changeVisible();
             }
-            // console.log(select)
         }
     }
 
@@ -85,9 +86,6 @@ export class Player extends GameObject {
     }
 
     private playerControl(engine: Main): void {
-        // let px = (~~(this._position.x / Settings.ChipSize));
-        // let py = (~~(this._position.y / Settings.ChipSize) * (Field.Width) + (Field.Width * -1));
-        // this._debugText.setText = `Player x:${px} y:${py} judge: ${this._judgeMap[((px) + (py))]}`;
 
         if (this._position.x % Settings.ChipSize === 0 && this._position.y % Settings.ChipSize === 0 && !engine.isSelectVisible()) {
             this._direction.x = 0;
