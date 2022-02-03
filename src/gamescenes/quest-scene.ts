@@ -1,11 +1,8 @@
 import { Selecter } from './../gameobjects/selecter';
 import { BaseScene, SceneType } from "../rpstools/game/base-scene";
 import { Main } from "../rpstools/main";
-import { NPCWeapon } from './../gameobjects/npc-weapon';
-import { NPCItem } from './../gameobjects/npc-item';
 import { Player } from './../gameobjects/player';
 import { FieldMap } from "../gameobjects/fieldmap";
-import { NPCQuestGuide } from '../gameobjects/npc-questguide';
 
 export class QuestScene extends BaseScene {
 

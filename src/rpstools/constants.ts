@@ -1,5 +1,3 @@
-import { Texture } from "pixi.js"
-
 export const Settings = {
     GameWidthSize: 48 * 18,
     GameHeightSize: 48 * 12,

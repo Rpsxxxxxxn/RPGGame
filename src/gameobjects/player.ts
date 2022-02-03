@@ -1,3 +1,4 @@
+import { MapStage } from './../rpstools/assets-manager';
 import { CharacterType } from './../rpstools/game/game-character';
 import { SelectType } from './../rpstools/game/select-overlay';
 import { SceneType } from './../rpstools/game/base-scene';
@@ -31,7 +32,7 @@ export class Player extends GameObject {
     }
 
     public onInit(engine: Main): void {
-        let mapinfo = engine.getMapJson('./assets/json/town1.json');
+        let mapinfo = engine.getMapJsonByStage(engine.shareData.nowStage);
         if (mapinfo) {
             this._judgeMap = mapinfo.data[1].map;
         }
@@ -67,6 +68,7 @@ export class Player extends GameObject {
                     switch (select) {
                         case SelectType.Select1:
                             engine.setScene(SceneType.Quest);
+                            engine.shareData.nowStage = MapStage.Stage1;
                             break;
                     }
                 }
