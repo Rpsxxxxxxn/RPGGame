@@ -1,3 +1,4 @@
+import { ShareData } from './share-data';
 import { GameField } from '../rpstools/game/game-field';
 import { GameObject, ObjectType } from "../rpstools/game/base-object";
 import { Main } from '../rpstools/main';

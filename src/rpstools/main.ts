@@ -1,6 +1,6 @@
+import { ShareData } from './../gameobjects/share-data';
 import { QuestScene } from './../gamescenes/quest-scene';
 import { Container, Application, Texture } from 'pixi.js';
-import axios, { Axios } from 'axios';
 import { BattleScene } from "../gamescenes/battle-scene";
 import { WorldScene } from "../gamescenes/world-scene";
 import { BaseScene, SceneType } from "./game/base-scene";
@@ -11,7 +11,6 @@ import { Timer } from './timer';
 import { AssetsManager, MapInfo, MapStage } from './assets-manager';
 import { SelectOverlay, TalkPlayerInfo } from './game/select-overlay';
 import { CharacterType } from './game/game-character';
-import { ShareData } from '../gameobjects/share-data';
 
 export class Main {
     private _application: Application;

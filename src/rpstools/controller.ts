@@ -20,6 +20,7 @@ export class Keyboard {
 
         for (let i = 0; i < 256; i++) {
             this._newKey[i] = false;
+            this._oldKey[i] = false;
         }
 
         window.addEventListener("keydown", this.onKeyDown.bind(this));

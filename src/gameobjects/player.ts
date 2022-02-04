@@ -1,3 +1,4 @@
+import { MapStage } from './../rpstools/assets-manager';
 import { CharacterType } from './../rpstools/game/game-character';
 import { SelectType } from './../rpstools/game/select-overlay';
 import { SceneType } from './../rpstools/game/base-scene';
@@ -10,7 +11,6 @@ import { Main } from '../rpstools/main';
 import { Character, Settings } from '../rpstools/constants';
 import { GameCharacter } from '../rpstools/game/game-character';
 import { DebugText } from '../rpstools/debug-text';
-import { MapStage } from '../rpstools/assets-manager';
 
 export class Player extends GameObject {
     private _character: GameCharacter = new GameCharacter();

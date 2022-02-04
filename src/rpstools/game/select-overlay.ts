@@ -75,7 +75,6 @@ export class SelectOverlay {
             this._selectGraphics.position.y = (Settings.ChipSize * 9) + (Settings.ChipSize * 0.4) + (this._selectIndex * Settings.ChipSize);
 
             if (engine.getKeyPressed(KeyCode.enter)) {
-                // this.changeVisible();
                 return this._selectIndex;
             }
         }
