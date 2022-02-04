@@ -14,6 +14,10 @@ export const Field = {
 }
 
 export const Character = {
-    PlayerStartPosX: 48 * 8,
-    PlayerStartPosY: 48 * 5,
+    PlayerTownPosX: 48 * 8,
+    PlayerTownPosY: 48 * 5,
+    PlayerStage1PosX: 48 * 5,
+    PlayerStage1PosY: 48 * 1,
+    PlayerStage2PosX: 48 * 2,
+    PlayerStage2PosY: 48 * 1,
 }

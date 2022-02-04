@@ -13,13 +13,9 @@ export class Selecter extends GameObject {
 
     public onInit(engine: Main): void {
         engine.createGraphics();
-        // engine.changeVisible();
     }
 
     public onUpdate(engine: Main): void {
-
-        // this._count += 1234;
-        // this._select.addMessageText(this._count.toString());
     }
 
     public onDestroy(engine: Main): void {

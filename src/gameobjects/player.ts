@@ -25,8 +25,8 @@ export class Player extends GameObject {
 
     constructor(engine: Main) {
         super(ObjectType.Character, engine.getObjectId, Player.name);
-        this._position.x = Character.PlayerStartPosX;
-        this._position.y = Character.PlayerStartPosY;
+        this._position.x = engine.shareData.playerStartPosition.x;
+        this._position.y = engine.shareData.playerStartPosition.y;
         this._direction.x = 0;
         this._direction.y = 0;
     }
@@ -77,6 +77,12 @@ export class Player extends GameObject {
         }
     }
 
+    /**
+     * 壁を判定
+     * @param dx 
+     * @param dy 
+     * @returns 
+     */
     private wallCheck(dx: number, dy: number): boolean {
         this._talkDirection.x = dx;
         this._talkDirection.y = dy;
@@ -85,6 +91,10 @@ export class Player extends GameObject {
         return this._judgeMap[((px) + (py))] === 0
     }
 
+    /**
+     * プレイヤーの操作
+     * @param engine 
+     */
     private playerControl(engine: Main): void {
 
         if (this._position.x % Settings.ChipSize === 0 && this._position.y % Settings.ChipSize === 0 && !engine.isSelectVisible()) {
